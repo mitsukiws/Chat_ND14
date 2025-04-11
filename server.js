@@ -1,5 +1,5 @@
 require("dotenv").config();
-let db = require("./db");
+// let db = require("./db");
 let http = require("http");
 let path = require("path");
 let fs = require("fs");
@@ -36,6 +36,14 @@ let server = http.createServer(function (req, res) {
 
 let io = new socket.Server(server);
 
+let chat = []
+
 io.on("connection", (s)=>{
     console.log("User id: " + s.id)
+    io.emit("update", JSON.stringify(chat))
+    s.on("message", (data)=>{
+        let message = JSON.parse(data)
+        chat.push(message)
+        io.emit("update", JSON.stringify(chat))
+    })
 })
