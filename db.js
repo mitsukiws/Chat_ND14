@@ -9,4 +9,37 @@ let db = mysql.createConnection({
     password: process.env.DB_PASS
 })
 
-module.exports = db
+let adb = db.promise()
+
+async function getUsers(){
+    try{
+        let [users, fields] = await adb.query("SELECT * FROM User1")
+        return users
+    }catch(err){
+        throw err.message
+    }
+}
+
+async function addMessage(content, author_id){
+    try{
+        let [users, fields] = await adb
+            .query("insert into Message1(content, author_id) values(?, ?)", [content, author_id])
+        return users
+    }catch(err){
+        throw err.message
+    }
+}
+
+async function getMessages(){
+    try{
+        let [users, fields] = await adb
+            .query(`SELECT m.id, m.content, a.id from Message1 ON m JOIN  `)
+        return users
+    }catch(err){
+        throw err.message
+    }
+}
+
+module.exports = {
+    getUsers
+}
