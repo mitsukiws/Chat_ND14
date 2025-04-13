@@ -33,7 +33,10 @@ async function addMessage(content, author_id){
 async function getMessages(){
     try{
         let [users, fields] = await adb
-            .query(`SELECT m.id, m.content, a.id from Message1 ON m JOIN  `)
+            .query(`SELECT m.id, m.content, m.author_id
+            FROM Message1 as m
+            JOIN User1 as u
+            ON m.author_id = u.id`)
         return users
     }catch(err){
         throw err.message
