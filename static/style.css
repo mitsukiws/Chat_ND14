@@ -5,7 +5,7 @@
 }
 
 body {
-    background: linear-gradient(45deg, white, purple);
+    background: linear-gradient(45deg, white, rgb(19, 12, 31));
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -13,9 +13,21 @@ body {
 
 header {
     text-align: center;
-    background-color: purple;
+    background-color: rgb(52, 49, 65);
     padding: 0.3rem;
     color: white;
+    position: relative;
+}
+
+header button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    border: none;
+    padding: 0,5rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+
 }
 
 main {
@@ -29,7 +41,7 @@ main {
 }
 
 .message {
-    background: linear-gradient(to right, purple, rgb(140, 56, 134));
+    background: linear-gradient(to right, rgb(39, 30, 54), rgb(162, 153, 179));
     width: fit-content;
     padding: 0.5rem;
     border-radius: 0.3rem;
@@ -51,7 +63,7 @@ main {
 }
 
 .form button {
-    background-color: purple;
+    background-color: rgb(46, 41, 58);
     color: white;
     padding: 0 1rem;
     font-size: 1.2rem;
