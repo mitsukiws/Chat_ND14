@@ -11,55 +11,53 @@ let db = mysql.createConnection({
 
 let adb = db.promise()
 
-async function getUsers() {
-    try {
-        let [users, fiellds] = await adb.query("SELECT * FROM user")
+async function getUsers(){
+    try{
+        let [users, fields] = await adb.query("SELECT * FROM User1")
         return users
-    } catch (err) {
+    }catch(err){
         throw err.message
     }
 }
 
-async function addMessage(content, auhtor_id) {
-    try {
-        let [users, fiellds] = await adb.query("insert into message(content, author_id) values(?, ?)", [content, auhtor_id])
+async function addMessage(content, author_id){
+    try{
+        let [users, fields] = await adb
+            .query("insert into Message1(content, author_id) values(?, ?)", [content, author_id])
         return users
-    } catch (err) {
+    }catch(err){
         throw err.message
     }
 }
 
-async function getMessages() {
-    try {
-        let [users, fiellds] = await adb
-        .query(`SELECT m.id, m.content, m.author_id,u.login
-            FROM message as m
-            JOIN user as u
+async function getMessages(){
+    try{
+        let [users, fields] = await adb
+            .query(`SELECT m.id, m.content, m.author_id, u.login
+            FROM Message1 as m
+            JOIN User1 as u
             ON m.author_id = u.id`)
         return users
-    } catch (err) {
+    }catch(err){
         throw err.message
     }
 }
 
 
-
-async function existsUsers() {
-    try {
-        let [users, fiellds] = await adb.query("SELECT * FROM user WHERE login = ?", [login])
+async function existsUser(login){
+    try{
+        let [users, fields] = await adb.query("SELECT * FROM User1 WHERE login = ?", [login])
         return users.length > 0
-    } catch (err) {
+    }catch(err){
         throw err.message
     }
 }
 
-
-
-async function addUsers() {
-    try {
-        let [users, fiellds] = await adb.query("INSERT INTO user(login, password) VALUES", [login])
+async function addUser(login, password){
+    try{
+        let [users, fields] = await adb.query("INSERT INTO User1(login, password) VALUES(?,?)", [login, password])
         return users
-    } catch (err) {
+    }catch(err){
         throw err.message
     }
 }
@@ -69,6 +67,6 @@ module.exports = {
     getUsers,
     getMessages,
     addMessage,
-    existsUsers,
+    existsUser,
     addUser
 }

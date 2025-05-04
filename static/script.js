@@ -1,9 +1,9 @@
 const server = io()
-let nickname = "mitsukiws"
+let nickname = "Maksymcyk"
 document.querySelector(".form button").addEventListener("click", sendMessage)
 
 function sendMessage(){
-    let input = document.querySelector(".form input").value 
+    let input = document.querySelector(".form input").value
     document.querySelector(".form input").value = ""
     server.emit("message", JSON.stringify({
         user: nickname,
@@ -22,10 +22,10 @@ server.on("update", (data)=>{
 })
 
 
-alertify.success("Alertify is work")
+alertify.success("Alertify is work!")
 
 document.querySelector("header button").addEventListener("click", ()=>{
-    alertify.prompt("введіть нік", (e , val)=>{
+    alertify.prompt("Введіть свій нікнейм", (e , val)=>{
         if(e) nickname = val
     })
 })
