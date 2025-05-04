@@ -33,7 +33,7 @@ async function addMessage(content, author_id){
 async function getMessages(){
     try{
         let [users, fields] = await adb
-            .query(`SELECT m.id, m.content, m.author_id
+            .query(`SELECT m.id, m.content, m.author_id, u.login
             FROM Message1 as m
             JOIN User1 as u
             ON m.author_id = u.id`)
@@ -43,6 +43,30 @@ async function getMessages(){
     }
 }
 
+
+async function existsUser(login){
+    try{
+        let [users, fields] = await adb.query("SELECT * FROM User1 WHERE login = ?", [login])
+        return users.length > 0
+    }catch(err){
+        throw err.message
+    }
+}
+
+async function addUser(login, password){
+    try{
+        let [users, fields] = await adb.query("INSERT INTO User1(login, password) VALUES(?,?)", [login, password])
+        return users
+    }catch(err){
+        throw err.message
+    }
+}
+
+
 module.exports = {
-    getUsers
+    getUsers,
+    getMessages,
+    addMessage,
+    existsUser,
+    addUser
 }

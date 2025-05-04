@@ -14,12 +14,26 @@ let style = fs.readFileSync(pathToStyle, "utf-8");
 let pathToScript = path.join(__dirname, "static", "script.js");
 let script = fs.readFileSync(pathToScript, "utf-8");
 
+let pathToRegister = path.join(__dirname, "static", "register.html");
+let register = fs.readFileSync(pathToRegister, "utf-8");
+
+let pathToAuth = path.join(__dirname, "static", "auth.js");
+let auth = fs.readFileSync(pathToAuth, "utf-8");
+
 let server = http
     .createServer(function (req, res) {
         switch (req.url) {
             case "/":
                 res.writeHead(200, { "content-type": "text/html" });
                 res.end(index);
+                break;
+            case "/register":
+                res.writeHead(200, { "content-type": "text/html" });
+                res.end(register);
+                break;
+            case "/auth.js":
+                res.writeHead(200, { "content-type": "text/js" });
+                res.end(auth);
                 break;
             case "/style.css":
                 res.writeHead(200, { "content-type": "text/css" });
@@ -28,6 +42,20 @@ let server = http
             case "/script.js":
                 res.writeHead(200, { "content-type": "text/js" });
                 res.end(script);
+                break;
+            case "/api/register":
+                let data = ""
+                req.on("data", (chunk)=> data += chunk)
+                req.on("end",async ()=>{
+                    data = JSON.parse(data)
+                    console.log(data)
+                    if(await db.existsUser(data.login)){
+                        res.end(JSON.stringify({status: "User exist"}))
+                        return
+                    }
+                    
+                    res.end()
+                })
                 break;
             default:
                 res.writeHead(404, { "content-type": "text/html" });
@@ -40,20 +68,24 @@ let io = new socket.Server(server);
 
 let chat = [];
 
-io.on("connection", (s) => {
+io.on("connection",async (s) => {
     console.log("User id: " + s.id);
+    let messages = await db.getMessages()
+    console.log(messages)
+    let chat = messages.map(m=>({user: m.login, message: m.content}))
     io.emit("update", JSON.stringify(chat));
-    s.on("message", (data) => {
+    s.on("message", async (data) => {
         let message = JSON.parse(data);
-        chat.push(message);
+        let text = message.message
+
+        await db.addMessage(text, 1)
+
+        let messages = await db.getMessages()
+        console.log(messages)
+        let chat = messages.map(m=>({user: m.login, message: m.content}))
+        
         io.emit("update", JSON.stringify(chat));
     });
 });
 
-db.getUsers()
-    .then((result) => {
-        console.log(result);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+
