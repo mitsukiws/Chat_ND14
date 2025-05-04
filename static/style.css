@@ -68,3 +68,32 @@ main {
     padding: 0 1rem;
     font-size: 1.2rem;
 }
+
+.auth {
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(75, 72, 93);
+    color: white;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+form label {
+    margin-top: 0.5rem;
+}
+
+form input {
+    padding: 0.3rem;
+}
+
+form button {
+    margin-top: 1rem;
+    background-color: white;
+    border: none;
+    padding: 0.5rem;
+}
