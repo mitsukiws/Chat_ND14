@@ -13,7 +13,7 @@ let adb = db.promise()
 
 async function getUsers(){
     try{
-        let [users, fields] = await adb.query("SELECT * FROM User1")
+        let [users, fields] = await adb.query("SELECT * FROM user")
         return users
     }catch(err){
         throw err.message
@@ -23,7 +23,7 @@ async function getUsers(){
 async function addMessage(content, author_id){
     try{
         let [users, fields] = await adb
-            .query("insert into Message1(content, author_id) values(?, ?)", [content, author_id])
+            .query("insert into message(content, author_id) values(?, ?)", [content, author_id])
         return users
     }catch(err){
         throw err.message
@@ -34,8 +34,8 @@ async function getMessages(){
     try{
         let [users, fields] = await adb
             .query(`SELECT m.id, m.content, m.author_id, u.login
-            FROM Message1 as m
-            JOIN User1 as u
+            FROM message as m
+            JOIN user as u
             ON m.author_id = u.id`)
         return users
     }catch(err){
@@ -46,8 +46,17 @@ async function getMessages(){
 
 async function existsUser(login){
     try{
-        let [users, fields] = await adb.query("SELECT * FROM User1 WHERE login = ?", [login])
+        let [users, fields] = await adb.query("SELECT * FROM user WHERE login = ?", [login])
         return users.length > 0
+    }catch(err){
+        throw err.message
+    }
+}
+
+async function getUser(login){
+    try{
+        let [users, fields] = await adb.query("SELECT * FROM user WHERE login = ?", [login])
+        return users
     }catch(err){
         throw err.message
     }
@@ -55,7 +64,7 @@ async function existsUser(login){
 
 async function addUser(login, password){
     try{
-        let [users, fields] = await adb.query("INSERT INTO User1(login, password) VALUES(?,?)", [login, password])
+        let [users, fields] = await adb.query("INSERT INTO user(login, password) VALUES(?,?)", [login, password])
         return users
     }catch(err){
         throw err.message
@@ -68,5 +77,6 @@ module.exports = {
     getMessages,
     addMessage,
     existsUser,
-    addUser
+    addUser,
+    getUser
 }
